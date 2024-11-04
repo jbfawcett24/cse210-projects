@@ -38,7 +38,5 @@ static void DisplayResult(string name, int number)
         string userNumber = PromptUserNumber();
         int squareNum = SquareNumber(userNumber);
         DisplayResult(userName, squareNum);
-
-
     }
 }
