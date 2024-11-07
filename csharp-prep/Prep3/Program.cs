@@ -27,7 +27,7 @@ class Program
                     i++;
                 } 
             } while (intGuess != secretNum);
-            Console.Write("Would you like to play again? (Y?N): ");
+            Console.Write("Would you like to play again? (Y/N): ");
             string playAgain = Console.ReadLine();
             if(playAgain == "N") {
                 game = false;
