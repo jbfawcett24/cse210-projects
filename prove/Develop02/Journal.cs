@@ -4,7 +4,13 @@ using System.Transactions;
 class Journal
 {
     List<Entry> entries = new List<Entry>();
-    List<string> prompts = new List<string>{"food", "beans"};
+    List<string> prompts = new List<string>
+    {
+        "Who was the most interesting person I interacted with today?",
+        "What was the best part of my day?",
+        "How did I see the hand of the Lord in my life today?",
+        "What was the strongest emotion I felt today?",
+        "If I had one thing I could do over today, what would it be?"};
     Random rand = new Random();
     private DateTime date = DateTime.Now;
     private bool saved = true;
@@ -13,6 +19,7 @@ class Journal
     {
         if(entries.Count>0)
         {
+            Console.Clear();
             Console.WriteLine($"{entries[0].GetDate()} - {entries[^1].GetDate()}");
             for(int i = 0; i < entries.Count(); i++)
             {
@@ -30,7 +37,8 @@ class Journal
         int prompt = RandPrompt();
         Console.Write($"{prompts[prompt]}\n> ");
         string dateText = date.ToShortDateString();
-        entries.Add(new Entry(prompts[prompt], Console.ReadLine(), dateText));
+        string day = date.ToString("ddd");
+        entries.Add(new Entry(prompts[prompt], Console.ReadLine(), dateText, day));
         saved = false;
         Console.Clear();
     }
@@ -47,6 +55,7 @@ class Journal
                 writer.WriteLine(entry.GetDate());
                 writer.WriteLine(entry.GetPrompt());
                 writer.WriteLine(entry.GetEntry());
+                writer.WriteLine(entry.GetDay());
                 writer.WriteLine();
             }
             Console.WriteLine("Saved to file.\n");
@@ -57,18 +66,20 @@ class Journal
     }
     public void Load()
     {
-        if(entries.Count<=0)
+        if(entries.Count<=0 || saved == true)
         {
-        entries.Clear();
-        string[] lines = File.ReadAllLines(filename);
-        for(int i = 0; i<lines.Length; i+=4){
-            string date = lines[i];
-            string prompt = lines[i+1];
-            string entryText = lines[i+2];
-            entries.Add(new Entry(prompt, entryText, date));
-        }
-        Console.WriteLine("File loaded\n");
-        Console.ReadLine();
+            entries.Clear();
+            string[] lines = File.ReadAllLines(filename);
+            for(int i = 0; i<lines.Length; i+=5){
+                string date = lines[i];
+                string prompt = lines[i+1];
+                string entryText = lines[i+2];
+                string day = lines[i+3];
+                entries.Add(new Entry(prompt, entryText, date, day));
+            }
+            Console.WriteLine("File loaded\n");
+            Console.ReadLine();
+            Console.Clear();
         } else 
         {
             Console.WriteLine("You have unsaved jounral entries. Would you like to save the entries before loading the file? (Y/N)");
@@ -81,10 +92,12 @@ class Journal
                     string date = lines[i];
                     string prompt = lines[i+1];
                     string entryText = lines[i+2];
-                    entries.Add(new Entry(prompt, entryText, date));
+                    string day = lines[i+3];
+                    entries.Add(new Entry(prompt, entryText, date, day));
                 }
                 Console.WriteLine("File loaded\n");
                 Console.ReadLine();
+                Console.Clear();
             } else {
                 Save();
             }
@@ -105,18 +118,43 @@ class Journal
                 Environment.Exit(0);
             } else {
                 Save();
+                Environment.Exit(0);
             }
         }
     }
     public void StartUp()
     {
-        Console.WriteLine("Input the name of the file you would like to save to");
-        filename = Console.ReadLine();
-        Load();
+        Console.WriteLine("Welcome to the Journaling Software");
+        LoadNew();
     }
     public void LoadNew(){
-        Console.WriteLine("Input name of file to load:");
-        filename = Console.ReadLine();
-        Load();
+        if(saved == true)
+        {
+            Console.WriteLine("Input name of file to load:");
+            filename = Console.ReadLine();
+            if(!File.Exists(filename))
+            {
+                using(FileStream fs = File.Create(filename))
+                {
+                    Console.WriteLine("File created, entries will be saved here.");
+                    Console.ReadLine();
+                    Console.Clear();
+                }
+            } else {
+                Load();
+            }
+        } else 
+        {
+            Console.WriteLine("You have unsaved jounral entries. Would you like to save the entries before loading the file? (Y/N)");
+            string selection = Console.ReadLine();
+            if(selection.ToLower() == "n")
+            {
+                saved = true;
+                LoadNew();
+            } else {
+                Save();
+                LoadNew();
+            }
+        }
     }
 }
