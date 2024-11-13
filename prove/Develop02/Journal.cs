@@ -10,6 +10,7 @@ class Journal
         {
             entries[i].Display();
         }
+        Console.ReadLine();
     }
     public void addNew()
     {
@@ -23,8 +24,17 @@ class Journal
         return rand.Next(0,prompts.Count());
     }
 
-    public void Menu()
+    public string Menu()
     {
-
+        Console.Write($"[1] Add New Entry\n[2] Save to File\n[3] Load File\n[4] Display All Entries\n\nInput number here: ");
+        return Console.ReadLine();
+    }
+    public void Save()
+    {
+        Console.WriteLine("not done :/");
+    }
+    public void Load()
+    {
+        Console.WriteLine("not deon :/");
     }
 }
