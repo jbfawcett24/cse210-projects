@@ -1,31 +1,16 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 
 class Program
 {
     static void Main(string[] args)
     {
-        string input;
-        Journal journal = new Journal();
+        Menu menu = new Menu();
+        menu.StartUp();
         while(true)
         {
-        input = journal.Menu();
-            if(input == "1")
-            {
-                journal.addNew();
-            } else if (input == "2")
-            {
-                journal.Save();
-            } else if(input == "3")
-            {
-                journal.Load();
-            } else if(input == "4")
-            {
-                journal.Display();
-            } else if(input == "5")
-            {
-                break;
-            }
+            menu.Display();
         }
     }
 }

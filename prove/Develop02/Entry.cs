@@ -7,10 +7,9 @@ class Entry
     private string entry;
     private string prompt;
 
-    public Entry(string prompt, string entry)
+    public Entry(string prompt, string entry, string date)
     {
-        date = DateTime.Now;
-        dateText = date.ToShortDateString();
+        dateText = date;
         this.prompt = prompt;
         this.entry = entry;
     }
@@ -18,8 +17,16 @@ class Entry
     {
         Console.WriteLine($"{dateText}: {prompt}\n{entry}");
     }
-    public string getDate()
+    public string GetDate()
     {
         return dateText;
+    }
+    public string GetPrompt()
+    {
+        return prompt;
+    }
+    public string GetEntry()
+    {
+        return entry;
     }
 }
