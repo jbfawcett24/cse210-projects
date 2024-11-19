@@ -45,4 +45,8 @@ class Words
         }
         Console.WriteLine();
     }
+    public List<string> GetReplaced()
+    {
+        return replacedWords;
+    }
 }

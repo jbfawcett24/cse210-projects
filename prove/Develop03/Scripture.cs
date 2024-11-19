@@ -1,12 +1,21 @@
 class Scripture
 {
     string verse;
-    Refrence refrence = new Refrence("John", 3, 16);
+    Refrence refrence;
     public Words words;
-    public Scripture(string verse)
+    public Scripture(string book, int chapter, int startVerse, int endVerse, string verse)
     {
         this.verse = verse;
         words = new Words(verse);
+        refrence = new Refrence(book, chapter, startVerse, endVerse);
+        
+    }
+        public Scripture(string book, int chapter, int startVerse, string verse)
+    {
+        this.verse = verse;
+        words = new Words(verse);
+        refrence = new Refrence(book, chapter, startVerse);
+        
     }
     public void Display()
     {
