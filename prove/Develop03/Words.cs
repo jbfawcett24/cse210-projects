@@ -3,11 +3,11 @@ using System.Text;
 
 class Words
 {
-    string[] words;
+    static string[] words;
     List<string> replacedWords = new List<string>();
     string[] displayWords;
     List<int> removedNum = new List<int>();
-    int numWordsReplaced = 3;
+    int numWordsReplaced = 1;
     Random randWord = new Random();
     public Words(string scripture)
     {
@@ -16,18 +16,28 @@ class Words
     }
     public void ReplaceWords()
     {
-        displayWords = words;
+        displayWords = (string[])words.Clone();
         for(int i = 0; i<numWordsReplaced; i++)
         {
-            removedNum.Add(randWord.Next(0, words.Length));
+            removedNum.Add(RandWords());
         }
         removedNum.Sort();
         replacedWords.Clear();
-        for(int i = 0; i<numWordsReplaced; i++)
+        for(int i = 0; i<removedNum.Count; i++)
         {
             replacedWords.Add(words[removedNum[i]]);
-            displayWords[removedNum[i]] = DashWords(words[removedNum[i]]);
+            displayWords[removedNum[i]] = DashWords(displayWords[removedNum[i]]);
         }
+        Console.WriteLine("replaced");
+    }
+    private int RandWords()
+    {
+        int rand;
+        do
+        {
+            rand = randWord.Next(0, words.Length);
+        } while (removedNum.Contains(rand));
+        return rand;
     }
     private string DashWords(string word){
         StringBuilder dashedWord = new StringBuilder();
@@ -42,6 +52,11 @@ class Words
         for(int i = 0; i<displayWords.Length; i++)
         {
             Console.Write($"{displayWords[i]} ");
+        }
+        Console.WriteLine();
+        for(int i = 0; i<replacedWords.Count;i++)
+        {
+            Console.Write($"{replacedWords[i]} ");
         }
         Console.WriteLine();
     }
