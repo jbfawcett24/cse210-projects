@@ -4,15 +4,12 @@ class Program
 {
     static void Main(string[] args)
     {
-        // Console.WriteLine("Hello Develop03 World!");
-        // Refrence refrence = new Refrence("John", 3, 16);
-        // refrence.Display();
-        // Refrence refrence1 = new Refrence("Proverbs", 3, 5, 6);
-        // refrence1.Display();
         Menu menu = new Menu();
+        menu.StartUp();
         while(true)
         {
             menu.Display();
         }
     }
 }
+//Creativity shown: you have to input the words as they dissapear for more words to dissapear. aditionally, at the end, you may choose to redo it or quit.

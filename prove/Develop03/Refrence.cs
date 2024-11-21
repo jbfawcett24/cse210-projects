@@ -19,6 +19,7 @@ class Refrence
     }
     public void Display()
     {
+        Console.Clear();
         Console.WriteLine($"{book} {chapter}:{verses}");
     }
 }

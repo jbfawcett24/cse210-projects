@@ -1,8 +1,10 @@
+using System.Text;
+
 class Scripture
 {
     string verse;
     Refrence refrence;
-    public Words words;
+    private Words words;
     public Scripture(string book, int chapter, int startVerse, int endVerse, string verse)
     {
         this.verse = verse;
@@ -21,5 +23,18 @@ class Scripture
     {
         refrence.Display();
         words.Display();
+    }
+    public void ReplaceWords()
+    {
+        words.ReplaceWords();
+    }
+    public List<string> GetReplaced()
+    {
+        return words.GetReplaced();
+    }
+    public string GetVerse()
+    {
+        refrence.Display();
+        return verse;
     }
 }

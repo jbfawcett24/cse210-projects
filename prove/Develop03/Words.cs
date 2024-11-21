@@ -7,7 +7,8 @@ class Words
     List<string> replacedWords = new List<string>();
     string[] displayWords;
     List<int> removedNum = new List<int>();
-    int numWordsReplaced = 1;
+    int numWordsReplaced;
+    int startReplaced = 3;
     Random randWord = new Random();
     public Words(string scripture)
     {
@@ -17,6 +18,12 @@ class Words
     public void ReplaceWords()
     {
         displayWords = (string[])words.Clone();
+        if(numWordsReplaced > words.Length - removedNum.Count() && words.Length - removedNum.Count() != 0)
+        {
+            numWordsReplaced = words.Length-removedNum.Count();
+        } else {
+            numWordsReplaced = startReplaced;
+        }
         for(int i = 0; i<numWordsReplaced; i++)
         {
             removedNum.Add(RandWords());
@@ -28,16 +35,22 @@ class Words
             replacedWords.Add(words[removedNum[i]]);
             displayWords[removedNum[i]] = DashWords(displayWords[removedNum[i]]);
         }
-        Console.WriteLine("replaced");
+        //Console.WriteLine("replaced");
     }
     private int RandWords()
     {
-        int rand;
-        do
+        if(removedNum.Count() != words.Length)
         {
-            rand = randWord.Next(0, words.Length);
-        } while (removedNum.Contains(rand));
-        return rand;
+            int rand;
+            do
+            {
+                rand = randWord.Next(0, words.Length);
+            } while (removedNum.Contains(rand));
+            return rand;
+        } else {
+            Finished();
+            return 0;
+        }
     }
     private string DashWords(string word){
         StringBuilder dashedWord = new StringBuilder();
@@ -54,14 +67,26 @@ class Words
             Console.Write($"{displayWords[i]} ");
         }
         Console.WriteLine();
-        for(int i = 0; i<replacedWords.Count;i++)
-        {
-            Console.Write($"{replacedWords[i]} ");
-        }
-        Console.WriteLine();
+        // for(int i = 0; i<replacedWords.Count;i++)
+        // {
+        //     Console.Write($"{replacedWords[i]} ");
+        // }
+        // Console.WriteLine();
     }
     public List<string> GetReplaced()
     {
         return replacedWords;
+    }
+    private void Finished()
+    {
+        Console.WriteLine("Congrats, you finished the scripture. Type quit to quit, or press enter to try again");
+        string userInput = Console.ReadLine();
+        if(userInput == "quit")
+        {
+            Environment.Exit(0);
+        } else {
+            replacedWords.Clear();
+            removedNum.Clear();
+        }
     }
 }
