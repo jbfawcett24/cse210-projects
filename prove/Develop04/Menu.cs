@@ -7,6 +7,7 @@ class Menu
     Reflecting reflecting = new Reflecting("Reflecting Activity", "This activity will help you reflect on times in your life when you have shown strength and resilience. This will help you recognize the power you have and how you can use it in other aspects of your life.");
     public void DisplayMenu()
     {
+        Console.Clear();
         Console.WriteLine("Menu Options:");
         Console.WriteLine("\t1. Start breathing activity");
         Console.WriteLine("\t2. Start reflecting activity");
@@ -25,6 +26,11 @@ class Menu
                 breathing.DoActivity();
                 DisplayMenu();
                 break;
+            case "2":
+                Console.Clear();
+                reflecting.DoActivity();
+                DisplayMenu();
+                break;
             case "3":
                 Console.Clear();
                 listing.DoActivity();
@@ -32,7 +38,6 @@ class Menu
                 break;
             case "4":
                 Console.Clear();
-                listing.SaveAnswers();
                 Environment.Exit(0);
                 break;
             default:

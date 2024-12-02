@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 class Listing : Activity
 {
-    List<string> prompts = new List<string>{};
+    List<string> prompts = new List<string>{"Who are people that you appreciate?", "What are personal strengths of yours?", "Who are people that you have helped this week?", "When have you felt the Holy Ghost this month?", "Who are some of your personal heroes?"};
     List<string> answers = new List<string>{};
     List<string> loadedAnswers = new List<string>{};
     string filename = "list.txt";
@@ -23,6 +23,7 @@ class Listing : Activity
         }
         SaveAnswers();
         Spinner(1);
+        End(GetName(), duration);
     }
     private void AskQuestion()
     {
@@ -34,6 +35,7 @@ class Listing : Activity
     }
     private void LoadAnswers()
     {
+        loadedAnswers.Clear();
         loadedAnswers = File.ReadAllLines(filename).ToList();
     }
     public void SaveAnswers()
@@ -44,12 +46,11 @@ class Listing : Activity
             {
                 loadedAnswers.Add(answers[i]);
             }
-            for (int i = 0; i < answers.Count; i++)
+            for (int i = 0; i < loadedAnswers.Count; i++)
             {
-                writer.WriteLine(answers[i]);
+                Console.WriteLine(loadedAnswers[i]);
+                writer.WriteLine(loadedAnswers[i]);
             }
-            Console.WriteLine("Saved to file.\n");
-            Console.Clear();
         }
     }
     private void DisplayAnswers()
@@ -68,7 +69,6 @@ class Listing : Activity
         string intput = Console.ReadLine();
         if(intput == "y")
         {
-            SaveAnswers();
             LoadAnswers();
             DisplayAnswers();
         }

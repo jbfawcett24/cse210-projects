@@ -3,6 +3,7 @@ class Breathing : Activity
     public Breathing(string name, string description) : base(name, description){}
     public void DoActivity()
     {
+        Console.ResetColor();
         int duration = Start();
         Console.Clear();
         CheckDuration(duration);
@@ -11,8 +12,7 @@ class Breathing : Activity
             Breath(10);
         }
         Spinner(duration % 10);
-        Console.ReadLine();
-        Console.Clear();
+        End(GetName(), duration);
     }
     private void Breath(int time)
     {
@@ -23,9 +23,11 @@ class Breathing : Activity
     private void CheckDuration(int duration)
     {
         if(duration < 10)
-        {
+        {   
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("Please input a value greater than 10 seconds.");
             DoActivity();
+            Console.ResetColor();
         }
     }
 }

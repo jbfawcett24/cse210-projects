@@ -4,6 +4,7 @@ class Activity
 {
     string description;
     string name;
+    Random random = new Random();
     public Activity(string name, string description)
     {
         this.description = description;
@@ -57,16 +58,20 @@ class Activity
         }
         return int.Parse(input);
     }
-    public void End()
+    public void End(string title, int time)
     {
-        
+        Console.WriteLine("Well Done!");
+        Console.WriteLine();
+        Console.WriteLine($"You have completed {time} seconds of {title}");
+        Console.ReadLine();
+        Console.Clear();
     }
     public string GetRandPrompt(List<string> prompts)
     {
-        return "hi";
+        return prompts[random.Next(0, prompts.Count)];
     }
-    private void CheckReplaced()
+    public string GetName()
     {
-
+        return name;
     }
 }
