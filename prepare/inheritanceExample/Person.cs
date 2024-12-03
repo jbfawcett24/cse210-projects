@@ -13,4 +13,8 @@ class Person
     {
         return $"{firstName}, {lastName}, {age}";
     }
+    public void SetFirstName(string firstName)
+    {
+        this.firstName = firstName;
+    }
 }
