@@ -5,4 +5,8 @@ class Checklist : Goal
     {
         this.completePoints = completePoints;
     }
+    public override int GetFinishedPoints()
+    {
+        return completePoints;
+    }
 }

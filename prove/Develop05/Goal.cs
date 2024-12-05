@@ -36,8 +36,16 @@ class Goal
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine($"Quest Completed, you gained {points} points!");
         Console.ForegroundColor = ConsoleColor.White;
+        timesCompleted++;
+    }
+    public bool GetFinished()
+    {
+        if(timesToComplete == timesCompleted)
         {
-            
+            return true;
+        } else {
+            return false;
         }
     }
+    public virtual int GetFinishedPoints(){return 0;}
 }

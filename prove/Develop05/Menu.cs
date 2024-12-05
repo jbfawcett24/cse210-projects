@@ -12,6 +12,7 @@ class Menu
     }
     public void DisplayMenu()
     {
+        Console.Clear();
         users[currentUser].DisplayUserInfo();
         users[currentUser].DisplayAllGoals();
         DisplayMenu();
