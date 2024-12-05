@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 class User
 {
     List<Goal> goals = new List<Goal>{};
+    List<Goal> completeGoals = new List<Goal>{};
     string filePath;
     string name;
     int level;
@@ -10,6 +11,8 @@ class User
     int numSimple;
     int numEternal;
     int numChecklist;
+    int numSimpleComplete = 0;
+    int numChecklistComplete = 0;
     int xpToLevelUp;
     public User(string filename)
     {
@@ -99,22 +102,32 @@ class User
     {
         string input = Console.ReadLine();
         string type;
-        int number;
-        if(input.Length>1)
+        int number = -1;
+        if(input.Length<=1)
+        {
+            return;
+        } else
         {
             type = input.Substring(0,1).ToLower();
+            try 
+            {
             number = int.Parse(input.Substring(1));
+            } catch 
+            {
+                QuestSelect();
+            }
             switch(type)
             {
                 case "s":
-                    if(number<numSimple)
+                    if(number<numSimple&&number>=0&&goals[number].GetFinished() == false)
                     {
                         goals[number].CompleteQuest();
                         SetXp(goals[number].GetPoints());
                         Console.ReadLine();
+                        AddCompleteGoals();
                         CheckLevel();
                     } else {
-                        QuestSelect();
+                        return;
                     }
                     break;
                 case "e":
@@ -125,7 +138,7 @@ class User
                         Console.ReadLine();
                         CheckLevel();
                     } else {
-                        QuestSelect();
+                        return;
                     }
                     break;
                 case "c":
@@ -137,18 +150,93 @@ class User
                         {
                             SetXp(goals[number+numSimple+numEternal].GetFinishedPoints());
                         }
+                        AddCompleteGoals();
                         Console.ReadLine();
                         CheckLevel();
                     } else {
-                        QuestSelect();
+                        return;
                     }
                     break;
                 default:
-                    break;
+                    return;
             }
-        } else{
-            QuestSelect();
         }
+    }
+    
+    private void AddCompleteGoals()
+    {
+        for(int i = 0; i<goals.Count; i++)
+        {
+            if(goals[i].GetFinished())
+            {
+                completeGoals.Add(goals[i]);
+                goals.RemoveAt(i);
+                if(i<numSimple)
+                {
+                    numSimple--;
+                    numSimpleComplete++;
+                } else if(i>=numEternal && i<numChecklist)
+                {
+                    numChecklist--;
+                    numChecklistComplete++;
+                }
+            }
+        }
+    }
+    public void DisplayAllComplete()
+    {
+        if(completeGoals.Count>0)
+        {
+            Console.WriteLine("Simple Quests:");
+            for(int i = 0; i<numSimpleComplete; i++)
+            {
+                completeGoals[i].DisplayGoal();
+            }
+            Console.WriteLine("Checklist Quests: ");
+            for(int i = 0; i< numChecklistComplete; i++)
+            {
+                completeGoals[i+numSimpleComplete].DisplayGoal();
+            }
+            Console.ReadLine();
+        } else 
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("No complete goals, how dare you");
+            Console.ReadLine();
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+    }
+    public void CreateNewGoal()
+    {
+        Console.WriteLine("What type of Goal");
+        Console.WriteLine("[0] Simple Goal");
+        Console.WriteLine("[1] Eternal Goal");
+        Console.WriteLine("[2] Checklist Goal");
+        string input = Console.ReadLine();
+        switch(input)
+        {
+            case "0":
+                CreateSimple();
+                break;
+            case "1":
+                CreateEternal();
+                break;
+            case "2":
+                CreateChecklist();
+                break;
+        }
+    }
+    private void CreateSimple()
+    {
+
+    }
+    private void CreateEternal()
+    {
+
+    }
+    private void CreateChecklist()
+    {
+
     }
     private double GetProgressBar()
     {

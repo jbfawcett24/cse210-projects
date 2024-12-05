@@ -5,6 +5,12 @@ class Checklist : Goal
     {
         this.completePoints = completePoints;
     }
+    public override void DisplayGoal()
+    {
+        base.DisplayGoal();
+        Console.Write($" {{{timesCompleted}/{timesToComplete}}} ({completePoints}pts)");
+        Console.WriteLine();
+    }
     public override int GetFinishedPoints()
     {
         return completePoints;

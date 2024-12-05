@@ -6,4 +6,9 @@ class Eternal : Goal
     {
         
     }
+    public override void DisplayGoal()
+    {
+        base.DisplayGoal();
+        Console.WriteLine();
+    }
 }
