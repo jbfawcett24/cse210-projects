@@ -23,11 +23,18 @@ class User
         xp = int.Parse(userInfo[2]);
         xpToLevelUp = (level*50)+50;
         string [] simpleGoals = File.ReadAllLines(@$"{filePath}/simple.txt");
-        numSimple = simpleGoals.Length;
         for(int i = 0; i< simpleGoals.Length; i++)
         {
             string[] createSimple = simpleGoals[i].Split(",");
-            goals.Add(new Simple(createSimple[0], int.Parse(createSimple[1]), int.Parse(createSimple[2])));
+            if(createSimple[2] == "0")
+            {
+                goals.Add(new Simple(createSimple[0], int.Parse(createSimple[1]), int.Parse(createSimple[2])));
+                numSimple++;
+            } else if (createSimple[2] == "1")
+            {
+                completeGoals.Add(new Simple(createSimple[0], int.Parse(createSimple[1]), int.Parse(createSimple[2])));
+                numSimpleComplete++;
+            }
         }
         string [] eternalGoals = File.ReadAllLines(@$"{filePath}/eternal.txt");
         numEternal = eternalGoals.Length;
@@ -37,11 +44,18 @@ class User
             goals.Add(new Eternal(createEternal[0], int.Parse(createEternal[1]), int.Parse(createEternal[2])));
         }
         string [] checklistGoals = File.ReadAllLines(@$"{filePath}/checklist.txt");
-        numChecklist = checklistGoals.Length;
         for(int i = 0; i< checklistGoals.Length; i++)
         {
             string[] createChecklist = checklistGoals[i].Split(",");
-            goals.Add(new Checklist(createChecklist[0], int.Parse(createChecklist[1]), int.Parse(createChecklist[2]), int.Parse(createChecklist[3]), int.Parse(createChecklist[4])));
+            if(createChecklist[2] != createChecklist[3])
+            {
+                goals.Add(new Checklist(createChecklist[0], int.Parse(createChecklist[1]), int.Parse(createChecklist[2]), int.Parse(createChecklist[3]), int.Parse(createChecklist[4])));
+                numChecklist++;
+            } else if(createChecklist[2] == createChecklist[3])
+            {
+                completeGoals.Add(new Checklist(createChecklist[0], int.Parse(createChecklist[1]), int.Parse(createChecklist[2]), int.Parse(createChecklist[3]), int.Parse(createChecklist[4])));
+                numChecklistComplete++;
+            }
         }
     }
     public void DisplayUserInfo()
@@ -66,33 +80,19 @@ class User
         Console.WriteLine("Simple Quests [S]:");
         for(int i = 0; i<numSimple; i++)
         {
-            Console.Write($"[{i}] [");
-            if(goals[i].GetFinished())
-            {
-                Console.Write("x");
-            } else {
-                Console.Write(" ");
-            }
-            Console.Write("] ");
+            Console.Write($"   [{i}] ");
             goals[i].DisplayGoal();
         }
         Console.WriteLine("Eternal Quests [E]:");
         for(int i = 0; i<numEternal; i++)
         {
-            Console.Write($"[{i}] ");
+            Console.Write($"   [{i}] ");
             goals[i+numSimple].DisplayGoal();
         }
         Console.WriteLine("Checklist Quests [C]: ");
-        for(int i = 0; i< numChecklist; i++)
+        for(int i = 0; i<numChecklist; i++)
         {
-            Console.Write($"[{i}] [");
-            if(goals[i+numSimple+numEternal].GetFinished())
-            {
-                Console.Write("x");
-            } else {
-                Console.Write(" ");
-            }
-            Console.Write("] ");
+            Console.Write($"   [{i}] ");
             goals[i+numSimple+numEternal].DisplayGoal();
         }
         Console.WriteLine("Input the letter, then the number, of the quest you would like to check off (quit to exit)");
@@ -165,7 +165,7 @@ class User
     
     private void AddCompleteGoals()
     {
-        for(int i = 0; i<goals.Count; i++)
+        for(int i = goals.Count -1; i>=0; i--)
         {
             if(goals[i].GetFinished())
             {
@@ -175,7 +175,7 @@ class User
                 {
                     numSimple--;
                     numSimpleComplete++;
-                } else if(i>=numEternal && i<numChecklist)
+                } else if(i>=numEternal+numSimple)
                 {
                     numChecklist--;
                     numChecklistComplete++;
@@ -208,10 +208,11 @@ class User
     }
     public void CreateNewGoal()
     {
+        Console.Clear();
         Console.WriteLine("What type of Goal");
-        Console.WriteLine("[0] Simple Goal");
-        Console.WriteLine("[1] Eternal Goal");
-        Console.WriteLine("[2] Checklist Goal");
+        Console.WriteLine("   [0] Simple Goal");
+        Console.WriteLine("   [1] Eternal Goal");
+        Console.WriteLine("   [2] Checklist Goal");
         string input = Console.ReadLine();
         switch(input)
         {
@@ -228,15 +229,160 @@ class User
     }
     private void CreateSimple()
     {
-
+        Console.Write("What is the name of this goal (be descriptive): ");
+        string name  = Console.ReadLine();
+        bool validPoints = true;
+        int points = 0;
+        do
+        {
+            Console.Write("How many points should this goal be worth(recomended 50-200): ");
+            string inputPoints = Console.ReadLine();
+            try 
+            {
+                points = int.Parse(inputPoints);
+                validPoints = true;
+            }
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("Please input a valid number");
+                validPoints = false;
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        } while (!validPoints);
+        goals.Insert(numSimple, new Simple(name, points, 0));
+        numSimple++;
     }
     private void CreateEternal()
     {
-
+        Console.Write("What is the name of this goal (be descriptive): ");
+        string name  = Console.ReadLine();
+        bool validPoints = true;
+        int points = 0;
+        do
+        {
+            Console.Write("How many points should this goal be worth(recomended 50-200): ");
+            string inputPoints = Console.ReadLine();
+            try 
+            {
+                points = int.Parse(inputPoints);
+                validPoints = true;
+            }
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("Please input a valid number");
+                validPoints = false;
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        } while (!validPoints);
+        goals.Insert(numSimple+numEternal, new Eternal(name, points, 0));
+        numEternal++;
     }
     private void CreateChecklist()
     {
-
+        Console.Write("What is the name of this goal (be descriptive): ");
+        string name  = Console.ReadLine();
+        bool validPoints;
+        int points = 0;
+        int completions = 0;
+        int completePoints = 0;
+        do
+        {
+            Console.Write("How many points should this goal be worth(recomended 50-200): ");
+            string inputPoints = Console.ReadLine();
+            try 
+            {
+                points = int.Parse(inputPoints);
+                validPoints = true;
+            }
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("Please input a valid number");
+                validPoints = false;
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        } while (!validPoints);
+        do
+        {
+            Console.Write("How many times should this goal be completed: ");
+            string inputCompletions = Console.ReadLine();
+            try 
+            {
+                completions = int.Parse(inputCompletions);
+                validPoints = true;
+            }
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("Please input a valid number");
+                validPoints = false;
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        } while (!validPoints);
+        do
+        {
+            Console.Write($"How many Points for completing the goal {completions} times: ");
+            string inputCompletions = Console.ReadLine();
+            try 
+            {
+                completePoints = int.Parse(inputCompletions);
+                validPoints = true;
+            }
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("Please input a valid number");
+                validPoints = false;
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        } while (!validPoints);
+        goals.Insert(numSimple+numEternal+numChecklist, new Checklist(name, points, completions, 0, completePoints));
+        numChecklist++;
+    }
+    public void saveUserData()
+    {
+        using(StreamWriter writer = new StreamWriter(@$"{filePath}/simple.txt"))
+        {
+            for(int i = 0; i<numSimple; i++)
+            {
+                writer.Write($"{goals[i].GetName()},{goals[i].GetPoints()},{goals[i].GetTimesCompleted()}");
+                writer.WriteLine();
+            }
+            for(int i = 0; i<numSimpleComplete; i++)
+            {
+                writer.Write($"{completeGoals[i].GetName()},{completeGoals[i].GetPoints()},{completeGoals[i].GetTimesCompleted()}");
+                writer.WriteLine();
+            }
+        }
+        using( StreamWriter writer = new StreamWriter(@$"{filePath}/eternal.txt"))
+        {
+            for(int i = 0; i<numEternal; i++)
+            {
+                writer.Write($"{goals[i+numSimple].GetName()},{goals[i+numSimple].GetPoints()},{goals[i+numSimple].GetTimesCompleted()}");
+                writer.WriteLine();
+            }
+        }
+        using(StreamWriter writer = new StreamWriter(@$"{filePath}/checklist.txt"))
+        {
+            for(int i = 0; i< numChecklist; i++)
+            {
+                writer.Write($"{goals[i+numSimple+numEternal].GetName()},{goals[i+numSimple+numEternal].GetPoints()},{goals[i+numSimple+numEternal].GetTimesToComplete()},{goals[i+numSimple+numEternal].GetTimesCompleted()},{goals[i+numSimple+numEternal].GetFinishedPoints()}");
+                writer.WriteLine();
+            }
+            for(int i = 0; i<numChecklistComplete; i++)
+            {
+                writer.Write($"{completeGoals[i+numSimpleComplete].GetName()},{completeGoals[i+numSimpleComplete].GetPoints()},{completeGoals[i+numSimpleComplete].GetTimesToComplete()},{completeGoals[i+numSimpleComplete].GetTimesCompleted()},{completeGoals[i+numSimpleComplete].GetFinishedPoints()}");
+                writer.WriteLine();
+            }
+        }
+        using(StreamWriter writer = new StreamWriter(@$"{filePath}/userInfo.txt"))
+        {
+            writer.WriteLine(name);
+            writer.WriteLine(level);
+            writer.WriteLine(xp);
+        }
     }
     private double GetProgressBar()
     {

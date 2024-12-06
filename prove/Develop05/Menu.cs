@@ -18,6 +18,7 @@ class Menu
         Console.WriteLine($"   [1] View Completed Quests");
         Console.WriteLine($"   [2] Add new Quest");
         Console.WriteLine($"   [3] Switch User");
+        Console.WriteLine($"   [4] Quit");
         ProcessUserInput();
     }
     private void DisplayMenuQuests()
@@ -50,6 +51,15 @@ class Menu
                 break;
             case "3":
                 break;
+            case "4":
+                Save();
+                Environment.Exit(0);
+                break;
         }
+        DisplayMenu();
+    }
+    public void Save()
+    {
+        users[currentUser].saveUserData();
     }
 }

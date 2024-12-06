@@ -15,7 +15,7 @@ class Goal
     {
         return name;
     }
-    public int GetPoints()
+    public virtual int GetPoints()
     {
         return points;
     }
