@@ -403,4 +403,8 @@ class User
             Console.ReadLine();
         }
     }
+    public string GetName()
+    {
+        return name.ToLower();
+    }
 }
