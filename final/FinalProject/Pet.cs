@@ -1,13 +1,13 @@
 abstract class Pet 
 {
     ConsoleColor color;
-    int smartLevel;
+    int smartLevel = 1;
     int smartXp;
     int smartXpLevel;
-    int healthLevel;
+    int healthLevel = 1;
     int healthXp;
     int healthXpLevel;
-    int happinessLevel;
+    int happinessLevel = 1;
     int happinessXp;
     int happinessXpLevel;
     string name;
@@ -27,6 +27,17 @@ abstract class Pet
         this.happinessLevel = happinessLevel;
         this.happinessXp = happinessXp;
     }
+    public string Name
+    {
+        get{return name;}
+        set{name = value;}
+    }
+    public ConsoleColor Color
+    {
+        get{return color;}
+        set{color = value;}
+    }
+    
     public void AddSmartXp(int num)
     {
         smartXp+=num;
@@ -71,13 +82,13 @@ abstract class Pet
         Console.WriteLine(name);
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write($"Smart Level {smartLevel}     [");
-        DisplayProgressBar(smartXp, 100);
+        DisplayProgressBar(smartXp, smartXpLevel);
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write($"Health Level {healthLevel}    [");
-        DisplayProgressBar(healthXp, 150);
+        DisplayProgressBar(healthXp, healthXpLevel);
         Console.ForegroundColor = ConsoleColor.Magenta;
         Console.Write($"Happiness Level {happinessLevel} [");
-        DisplayProgressBar(happinessXp, 50);
+        DisplayProgressBar(happinessXp, happinessXpLevel);
     }
     private void DisplayProgressBar(int xp, int xpToLevelUp)
     {

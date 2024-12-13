@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 class Menu
 {
     Pet pet = new Dog("jeff", ConsoleColor.DarkCyan);
@@ -7,15 +9,17 @@ class Menu
     DateOnly time = new DateOnly();
     public Menu()
     {
-        schoolTasks.Add(new School("hello", "daily", 100, time, true));
+        SetCurrentTime();
+        LoadAll();
     }
-    public void SetTime()
+    public void SetCurrentTime()
     {
         time = DateOnly.FromDateTime(DateTime.Now);
     }
-    public void GetTime()
+    public DateOnly GetTime()
     {
-
+        SetCurrentTime();
+        return time;
     }
     public void DisplayMenu()
     {
@@ -29,6 +33,7 @@ class Menu
         Console.WriteLine("Mental Tasks");
         Console.WriteLine("Input the letter and number of the task you would like to check off.\nInput 'new' to create a new task");
         ProcessInput();
+        SaveAll();
         DisplayMenu();
     }
     private void ProcessInput()
@@ -37,7 +42,7 @@ class Menu
         switch(input)
         {
             case "new":
-                Console.WriteLine("not done");
+                CreateNewTask();
                 break;
             default:
                 string letter = input.Substring(0,1).ToUpper();
@@ -74,5 +79,55 @@ class Menu
                 }
                 break;
         }
+    }
+    private void CreateNewTask()
+    {
+        Console.Write("What is tha name of the Task: ");
+        string name = Console.ReadLine();
+        Console.Write("How often should this repeat, Daily (D) or Weekly (W)");
+        string repeatTimeInput = Console.ReadLine();
+        string repeatTime;
+        if(repeatTimeInput.ToLower() == "d")
+        {
+            repeatTime = "daily";
+            Console.WriteLine(repeatTime);
+        } else 
+        {
+            repeatTime = "weekly";
+        }
+        bool isInt = false;
+        int points = 0;
+        do
+        {
+            Console.Write("How many points should this be worth (recomended 50-200): ");
+            string stringPoints = Console.ReadLine();
+            try 
+            {
+                points = int.Parse(stringPoints);
+                isInt = true;
+            }
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("Please input a number");
+            }
+        } while(isInt == false);
+
+        Console.Write("Is this a School (S), Physical (P), or Mental (M) task: ");
+        string type = Console.ReadLine();
+        switch(type.ToLower())
+        {
+            case "s":
+                schoolTasks.Add(new Task(name, repeatTime, points, GetTime(), false));
+                break;
+        }
+    }
+    public void SaveAll()
+    {
+        Save.SaveTask(schoolTasks, "schoolTasks");
+    }
+    public void LoadAll()
+    {
+        schoolTasks = Save.LoadTask("schoolTasks");
     }
 }
