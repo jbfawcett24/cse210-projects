@@ -11,12 +11,13 @@ abstract class Pet
     int happinessXp;
     int happinessXpLevel;
     string name;
+    string type;
     public Pet(string name, ConsoleColor color)
     {
         this.name = name;
         this.color = color;
     }
-    public Pet(string name, ConsoleColor color, int smartLevel, int smartXp, int healthLevel, int healthXp, int happinessLevel, int happinessXp)
+    public Pet(string name, ConsoleColor color, int smartLevel, int smartXp, int healthLevel, int healthXp, int happinessLevel, int happinessXp, string type)
     {
         this.name = name;
         this.color = color;
@@ -26,6 +27,7 @@ abstract class Pet
         this.healthXp = healthXp;
         this.happinessLevel = happinessLevel;
         this.happinessXp = happinessXp;
+        this.type = type;
     }
     public string Name
     {
@@ -37,7 +39,36 @@ abstract class Pet
         get{return color;}
         set{color = value;}
     }
-    
+    public int SmartLevel
+    {
+        get{return smartLevel;}
+        set{smartLevel = value;}
+    }
+    public int SmartXp
+    {
+        get{return smartXp;}
+        set{smartXp = value;}
+    }
+    public int HealthLevel
+    {
+        get{return healthLevel;}
+        set{healthLevel = value;}
+    }
+    public int HealthtXp
+    {
+        get{return healthXp;}
+        set{healthXp = value;}
+    }
+    public int HappinessLevel
+    {
+        get{return happinessLevel;}
+        set{happinessLevel = value;}
+    }
+    public int HappinessXp
+    {
+        get{return happinessXp;}
+        set{happinessXp = value;}
+    }
     public void AddSmartXp(int num)
     {
         smartXp+=num;
@@ -90,7 +121,7 @@ abstract class Pet
         Console.Write($"Happiness Level {happinessLevel} [");
         DisplayProgressBar(happinessXp, happinessXpLevel);
     }
-    private void DisplayProgressBar(int xp, int xpToLevelUp)
+    private void DisplayProgressBar(double xp, double xpToLevelUp)
     {
         double progress = xp/xpToLevelUp;
         for(int i = 0; i<50*progress; i++)
@@ -110,5 +141,13 @@ abstract class Pet
     public string GetName()
     {
         return name;
+    }
+    public string GetType()
+    {
+        return type;
+    }
+    public string GetStringColor()
+    {
+        return ToString();
     }
 }

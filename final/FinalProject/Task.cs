@@ -68,13 +68,11 @@ class Task
     }
     private void CheckComplete()
     {
+        currentTime = DateOnly.FromDateTime(DateTime.Now);
         if(!complete)
         {
             complete = false;
         } else if(lastCompleted != currentTime && repeatTime == "daily")
-        {
-            complete = false;
-        } else if(timeStarted.DayOfWeek == currentTime.DayOfWeek && repeatTime == "weekly")
         {
             complete = false;
         } else {
