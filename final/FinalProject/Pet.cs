@@ -12,10 +12,11 @@ abstract class Pet
     int happinessXpLevel;
     string name;
     string type;
-    public Pet(string name, ConsoleColor color)
+    public Pet(string name, ConsoleColor color, string type)
     {
         this.name = name;
         this.color = color;
+        this.type = type;
     }
     public Pet(string name, ConsoleColor color, int smartLevel, int smartXp, int healthLevel, int healthXp, int happinessLevel, int happinessXp, string type)
     {
@@ -142,7 +143,7 @@ abstract class Pet
     {
         return name;
     }
-    public string GetType()
+    public string GetPetType()
     {
         return type;
     }

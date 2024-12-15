@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 class Menu
 {
@@ -42,7 +43,7 @@ class Menu
     public void DisplayMenu()
     {
         users[currentUser].DisplayUserInfo();
-        Console.WriteLine("Input the letter and number of the task you would like to check off.\nInput 'new' to create a new task");
+        Console.WriteLine("Input the letter and number of the task you would like to check off.\nInput 'new' to create a new task, 'quit' to exit, or 'switch' to change pet");
         ProcessInput();
         users[currentUser].SaveAll();
         DisplayMenu();
@@ -55,13 +56,20 @@ class Menu
             case "new":
                 users[currentUser].CreateNewTask();
                 break;
+            case "quit":
+                Save();
+                Environment.Exit(0);
+                break;
+            case "switch":
+                ChangeUser();
+                break;
             default:
                 string letter = input.Substring(0,1).ToUpper();
                 int index = 0;
                 try
                 {
                     index =  int.Parse(input.Substring(1));
-                    Console.WriteLine(index);
+                    //Console.WriteLine(index);
                 } catch
                 {
                     Console.WriteLine("Input a valid Task");
@@ -70,6 +78,21 @@ class Menu
                 }
                 users[currentUser].CheckTasks(letter, index);
                 break;
+        }
+    }
+    private void ChangeUser()
+    {
+        Console.WriteLine("Select your user, 'new' to create a new user");
+        for(int i = 0; i<userNames.Count(); i++)
+        {
+            Console.WriteLine($"[{i}] {userNames[i]}");
+        }
+        string input = Console.ReadLine();
+        if(input == "new")
+        {
+            CreateNewUser();
+        } else {
+            int currentUser = int.Parse(input);
         }
     }
     public void StartUp()
@@ -93,5 +116,71 @@ class Menu
                 Console.WriteLine("please select a valid user");
             }
         } while (isInt == false);
+    }
+    private void CreateNewUser()
+    {
+        Console.Clear();
+        Console.WriteLine("what is the name of your pet");
+        string name = Console.ReadLine();
+        System.IO.Directory.CreateDirectory($"../../../{name}");
+        Console.Clear();
+        ConsoleColor[] colors = (ConsoleColor[])Enum.GetValues(typeof(ConsoleColor));
+        foreach (ConsoleColor colour in colors)
+        {
+            Console.ForegroundColor = colour;
+            Console.WriteLine(colour.ToString());
+        }
+        Console.ResetColor();
+        Console.WriteLine("\nEnter your chosen color:");
+        ConsoleColor color = ConsoleColor.White;
+        string userChoice = Console.ReadLine();
+        if (Enum.TryParse<ConsoleColor>(userChoice, true, out ConsoleColor selectedColor))
+        {
+            color = selectedColor;
+            Console.WriteLine($"\nYou selected {selectedColor}.");
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.WriteLine("\nInvalid color selection.");
+        }
+        bool animalSelect = false;
+        do
+        {
+            Console.WriteLine("What type on animal do you want your pet to be?\n[0] Dog\n[1] Cat\n[2] Fish");
+            string animalType = Console.ReadLine();
+            switch(animalType)
+            {
+                case "0":
+                    users.Add(new User(name, color, "dog"));
+                    userNames.Add(name);
+                    currentUser = users.Count -1;
+                    animalSelect = true;
+                    break;
+                case "1":
+                    users.Add(new User(name, color, "cat"));
+                    userNames.Add(name);
+                    currentUser = users.Count-1;
+                    animalSelect = true;
+                    break;
+                case "2":
+                    users.Add(new User(name, color, "fish"));
+                    userNames.Add(name);
+                    currentUser = users.Count-1;
+                    animalSelect = true;
+                    break;
+                default:
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine("Please input a valid number");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    break;
+            }
+        } while(animalSelect == false);
+        
+    }
+    private void Save()
+    {
+        users[currentUser].SaveAll();
+        File.WriteAllLines("../../../users.txt", userNames);
     }
 }

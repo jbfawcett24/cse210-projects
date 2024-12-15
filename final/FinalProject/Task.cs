@@ -53,16 +53,16 @@ class Task
     {
         return points;
     }
-    public virtual void DisplayTask()
+    public virtual void DisplayTask(int index)
     {
         if(ShouldDisplay())
         {
-            Console.WriteLine($"{name} [{points}]");
+            Console.WriteLine($"[{index}] {name} [{points}]");
         }
     }
     public void CompleteTask()
     {
-        Console.WriteLine("completed");
+        //Console.WriteLine("completed");
         lastCompleted = DateOnly.FromDateTime(DateTime.Now);
         complete = true;
     }
@@ -72,7 +72,7 @@ class Task
         if(!complete)
         {
             complete = false;
-        } else if(lastCompleted != currentTime && repeatTime == "daily")
+        } else if(lastCompleted != currentTime && (repeatTime == "daily" || repeatTime == "D"))
         {
             complete = false;
         } else {

@@ -17,11 +17,24 @@ class User
         Enum.TryParse<ConsoleColor>(petList[1], out color);
         switch(petList[8])
         {
-            case "dog":
+            case "Dog":
                 pet = new Dog(petList[0], color, int.Parse(petList[2]), int.Parse(petList[3]), int.Parse(petList[4]), int.Parse(petList[5]), int.Parse(petList[6]), int.Parse(petList[7]), petList[8]);
                 break;
         }
         LoadAll();
+    }
+    public User(string name, ConsoleColor color, string type)
+    {
+        this.name = name;
+        switch(type)
+        {
+            case "dog":
+                pet = new Dog(name, color, type);
+                break;
+            case "cat":
+                pet = new Cat(name, color, type);
+                break;
+        }
     }
     public Pet Pet
     {
@@ -52,20 +65,19 @@ class User
     {
         pet.DisplayAnimal();
         Console.WriteLine("School Tasks (S)");
-        foreach(Task task in schoolTasks)
+        for(int i = 0; i<schoolTasks.Count; i++)
         {
-            task.DisplayTask();
+            schoolTasks[i].DisplayTask(i);
         }
         Console.WriteLine("Physical Tasks (P)");
-        foreach(Task task in physicalTasks)
+        for(int i = 0; i<physicalTasks.Count; i++)
         {
-            task.DisplayTask();
+            physicalTasks[i].DisplayTask(i);
         }
         Console.WriteLine("Mental Tasks (M)");
         for(int i = 0; i<mentalTasks.Count; i++)
         {
-            Console.Write($"[{i}] ");
-            mentalTasks[i].DisplayTask();
+            mentalTasks[i].DisplayTask(i);
         }
     }
     public void LoadAll()
@@ -79,7 +91,8 @@ class User
         Save.SaveTask(schoolTasks, "schoolTasks", name);
         Save.SaveTask(physicalTasks, "physicalTasks", name);
         Save.SaveTask(mentalTasks, "mentalTasks", name);
-        File.WriteAllText($"../../../{name}/pet.pet", $"{pet.Name},{pet.GetStringColor},{pet.SmartLevel},{pet.SmartXp},{pet.HealthLevel},{pet.HealthtXp},{pet.HappinessLevel},{pet.HappinessXp},{pet.GetType()}");
+        string color = pet.GetStringColor();
+        File.WriteAllText($"../../../{name}/pet.pet", $"{pet.Name},{pet.Color},{pet.SmartLevel},{pet.SmartXp},{pet.HealthLevel},{pet.HealthtXp},{pet.HappinessLevel},{pet.HappinessXp},{pet.GetType()}");
     }
     public void CheckTasks(string letter, int index)
     {
@@ -88,17 +101,26 @@ class User
                     case "S":
                         schoolTasks[index].CompleteTask();
                         pet.AddSmartXp(schoolTasks[index].GetPoints());
-                        Console.WriteLine($"School {index}");
+                        if(schoolTasks[index].RepeatTime == "single")
+                        {
+                            schoolTasks.RemoveAt(index);
+                        }
                         break;
                     case "P":
                         physicalTasks[index].CompleteTask();
-                        pet.AddHealthXp(schoolTasks[index].GetPoints());
-                        Console.WriteLine($"Physical {index}");
+                        pet.AddHealthXp(physicalTasks[index].GetPoints());
+                        if(physicalTasks[index].RepeatTime == "single")
+                        {
+                            physicalTasks.RemoveAt(index);
+                        }
                         break;
                     case "M":
                         mentalTasks[index].CompleteTask();
                         pet.AddHappyXp(mentalTasks[index].GetPoints());
-                        Console.WriteLine("Mental");
+                        if(mentalTasks[index].RepeatTime == "single")
+                        {
+                            mentalTasks.RemoveAt(index);
+                        }
                         break;
                     default:
                         break;
