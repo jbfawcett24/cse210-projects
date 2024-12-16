@@ -42,6 +42,7 @@ class Menu
     }
     public void DisplayMenu()
     {
+        Console.Clear();
         users[currentUser].DisplayUserInfo();
         Console.WriteLine("Input the letter and number of the task you would like to check off.\nInput 'new' to create a new task, 'quit' to exit, 'study' to start a study timer, or 'switch' to change pet");
         ProcessInput();

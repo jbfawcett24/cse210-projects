@@ -151,7 +151,7 @@ class User
                 Console.WriteLine("Please input a number");
             }
         } while(isInt == false);
-        Console.Write("Should this be a Daily task (D), or a single use task (S)");
+        Console.Write("Should this be a Daily task (D), or a single use task (S): ");
         string repeatSelect = Console.ReadLine();
         if(repeatSelect.ToLower() == "d")
         {
