@@ -1,8 +1,8 @@
 class Goal
 {
     string name;
-    int timesToComplete;
-    int timesCompleted;
+    protected int timesToComplete;
+    protected int timesCompleted;
     int points;
     public Goal(string name, int points, int timesToComplete, int timesCompleted)
     {
@@ -15,7 +15,7 @@ class Goal
     {
         return name;
     }
-    public int GetPoints()
+    public virtual int GetPoints()
     {
         return points;
     }
@@ -29,7 +29,7 @@ class Goal
     }
     public virtual void DisplayGoal()
     {
-        Console.WriteLine($"{GetName()} ({GetPoints()} pts)");
+        Console.Write($"{GetName()} ({GetPoints()} pts)");
     }
     public virtual void CompleteQuest()
     {
