@@ -34,6 +34,9 @@ class User
             case "cat":
                 pet = new Cat(name, color, type);
                 break;
+            case "fish":
+                pet = new Fish(name, color, type);
+                break;
         }
     }
     public Pet Pet
@@ -170,5 +173,9 @@ class User
                 mentalTasks.Add(new Task(name, repeatTime, points, Menu.GetTime(), false));
                 break;
         }
+    }
+    public void AddStudyPoints(int minutes)
+    {
+        pet.AddSmartXp(minutes*10);
     }
 }

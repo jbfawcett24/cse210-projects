@@ -1,2 +1,4 @@
 James
-Bob
+Dog Example
+Cat Example
+Fish Example

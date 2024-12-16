@@ -43,7 +43,7 @@ class Menu
     public void DisplayMenu()
     {
         users[currentUser].DisplayUserInfo();
-        Console.WriteLine("Input the letter and number of the task you would like to check off.\nInput 'new' to create a new task, 'quit' to exit, or 'switch' to change pet");
+        Console.WriteLine("Input the letter and number of the task you would like to check off.\nInput 'new' to create a new task, 'quit' to exit, 'study' to start a study timer, or 'switch' to change pet");
         ProcessInput();
         users[currentUser].SaveAll();
         DisplayMenu();
@@ -62,6 +62,9 @@ class Menu
                 break;
             case "switch":
                 ChangeUser();
+                break;
+            case "study":
+                StudyTimer();
                 break;
             default:
                 string letter = input.Substring(0,1).ToUpper();
@@ -182,5 +185,32 @@ class Menu
     {
         users[currentUser].SaveAll();
         File.WriteAllLines("../../../users.txt", userNames);
+    }
+    private void StudyTimer()
+    {
+        Console.WriteLine("Enter the study time in minutes (You will recieve Smart Xp equal to 10x the amount of minutes studied):");
+        if (int.TryParse(Console.ReadLine(), out int minutes) && minutes > 0)
+        {
+            int totalSeconds = minutes * 60;
+
+            Console.WriteLine("Study timer started!");
+            for (int remaining = totalSeconds; remaining >= 0; remaining--)
+            {
+                Console.Clear();
+                TimeSpan time = TimeSpan.FromSeconds(remaining);
+                //users[currentUser].DisplayUserInfo();
+                Console.WriteLine($"Time Remaining: {time.ToString(@"mm\:ss")}");
+                Thread.Sleep(1000);
+            }
+
+            Console.Clear();
+            Console.WriteLine("Time's up! Good job studying!");
+            users[currentUser].AddStudyPoints(minutes);
+            Console.ReadLine();
+        }
+        else
+        {
+            Console.WriteLine("Invalid input. Please enter a valid number.");
+        }
     }
 }
